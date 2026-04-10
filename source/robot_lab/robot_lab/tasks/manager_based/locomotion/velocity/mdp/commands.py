@@ -81,6 +81,17 @@ class UniformThresholdVelocityCommand(mdp.UniformVelocityCommand):
             if self.cfg.heading_command:
                 self.heading_target[pit_env_ids] = 0.0
 
+        # Keep command components within configured ranges.
+        self.vel_command_b[:, 0] = torch.clamp(
+            self.vel_command_b[:, 0], min=self.cfg.ranges.lin_vel_x[0], max=self.cfg.ranges.lin_vel_x[1]
+        )
+        self.vel_command_b[:, 1] = torch.clamp(
+            self.vel_command_b[:, 1], min=self.cfg.ranges.lin_vel_y[0], max=self.cfg.ranges.lin_vel_y[1]
+        )
+        self.vel_command_b[:, 2] = torch.clamp(
+            self.vel_command_b[:, 2], min=self.cfg.ranges.ang_vel_z[0], max=self.cfg.ranges.ang_vel_z[1]
+        )
+
         # Update tracking state
         self.was_on_pit = on_pits
 

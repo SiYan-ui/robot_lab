@@ -110,7 +110,16 @@ from isaaclab.envs import (
 from isaaclab.utils.dict import print_dict
 
 from isaaclab_rl.skrl import SkrlVecEnvWrapper
-from isaaclab_rl.utils.pretrained_checkpoint import get_published_pretrained_checkpoint
+
+try:
+    from isaaclab.utils.pretrained_checkpoint import get_published_pretrained_checkpoint
+except ImportError:
+    try:
+        from isaaclab_rl.utils.pretrained_checkpoint import get_published_pretrained_checkpoint
+    except ImportError:
+        # The helper may be absent in some IsaacLab package versions.
+        def get_published_pretrained_checkpoint(*args, **kwargs):
+            return None
 
 from isaaclab_tasks.utils import get_checkpoint_path
 from isaaclab_tasks.utils.hydra import hydra_task_config

@@ -643,6 +643,12 @@ class RewardsCfg:
 
     upward = RewTerm(func=mdp.upward, weight=0.0)
 
+    excessive_roll_penalty = RewTerm(
+        func=mdp.excessive_roll_penalty,
+        weight=0.0,
+        params={"threshold": math.pi / 3, "asset_cfg": SceneEntityCfg("robot")},
+    )
+
 
 @configclass
 class TerminationsCfg:

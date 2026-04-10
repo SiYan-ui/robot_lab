@@ -613,6 +613,18 @@ def upward(env: ManagerBasedRLEnv, asset_cfg: SceneEntityCfg = SceneEntityCfg("r
     return reward
 
 
+def excessive_roll_penalty(
+    env: ManagerBasedRLEnv,
+    threshold: float,
+    asset_cfg: SceneEntityCfg = SceneEntityCfg("robot"),
+) -> torch.Tensor:
+    """Apply a hard penalty when absolute roll exceeds the threshold."""
+    asset: RigidObject = env.scene[asset_cfg.name]
+    projected_gravity_b = asset.data.projected_gravity_b
+    roll = torch.atan2(projected_gravity_b[:, 1], -projected_gravity_b[:, 2])
+    return (torch.abs(roll) > threshold).float()
+
+
 def base_height_l2(
     env: ManagerBasedRLEnv,
     target_height: float,

@@ -1,0 +1,2 @@
+当前项目为Robot_lab，请添加自定义四足机器人训练任务`xsdog`和`xiaotian`，urdf路径为`source/robot_lab/data/Robots/etc/`。四足任务目录`source/robot_lab/robot_lab/tasks/manager_based/locomotion/velocity/config/quadruped`.
+相应框架参考agibot_d1任务。关节名称、扭矩参考urdf。isaaclab环境：conda activate env_isaaclab

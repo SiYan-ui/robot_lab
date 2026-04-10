@@ -89,9 +89,24 @@ from isaaclab_rl.rsl_rl import (
     RslRlVecEnvWrapper,
     export_policy_as_jit,
     export_policy_as_onnx,
-    handle_deprecated_rsl_rl_cfg,
 )
-from isaaclab_rl.utils.pretrained_checkpoint import get_published_pretrained_checkpoint
+
+try:
+    from isaaclab_rl.rsl_rl import handle_deprecated_rsl_rl_cfg
+except ImportError:
+    # Backward compatibility for IsaacLab versions where this helper is absent.
+    def handle_deprecated_rsl_rl_cfg(agent_cfg, installed_version):
+        return agent_cfg
+
+try:
+    from isaaclab.utils.pretrained_checkpoint import get_published_pretrained_checkpoint
+except ImportError:
+    try:
+        from isaaclab_rl.utils.pretrained_checkpoint import get_published_pretrained_checkpoint
+    except ImportError:
+        # The helper may be absent in some IsaacLab package versions.
+        def get_published_pretrained_checkpoint(*args, **kwargs):
+            return None
 
 from isaaclab_tasks.utils import get_checkpoint_path
 from isaaclab_tasks.utils.hydra import hydra_task_config
