@@ -13,4 +13,20 @@ python scripts/reinforcement_learning/rsl_rl/play.py --task=RobotLab-Isaac-Veloc
 python scripts/reinforcement_learning/rsl_rl/train.py --task=RobotLab-Isaac-Velocity-Rough-Etc-XSDog-v0 --num_envs=1024 --headless
 
 
-python scripts/reinforcement_learning/rsl_rl/play.py  --task=RobotLab-Isaac-Velocity-Rough-Etc-XSDog-v0 --checkpoint=logs/rsl_rl/xsdog_rough/2026-04-09_17-29-26/model_12300.pt
+python scripts/reinforcement_learning/rsl_rl/play.py  --task=RobotLab-Isaac-Velocity-Rough-Etc-XSDog-v0 --checkpoint=logs/rsl_rl/xsdog_rough/2026-03-04_15-09-37/model_16150.pt
+
+
+# 新松四足Flat训练
+python scripts/reinforcement_learning/rsl_rl/train.py --task=RobotLab-Isaac-Velocity-Flat-Etc-XSDog-v0 --num_envs=1024 --headless
+
+# 新松四足Flat回放
+python scripts/reinforcement_learning/rsl_rl/play.py  --task=RobotLab-Isaac-Velocity-Flat-Etc-XSDog-v0 --checkpoint=logs/rsl_rl/xsdog_flat/2026-04-11_23-46-31/model_9999.pt
+
+# D1四足训练
+python scripts/reinforcement_learning/rsl_rl/train.py --task=RobotLab-Isaac-Velocity-Rough-Agibot-D1-v0 --num_envs=1024 --headless
+
+# D1四足回放
+python scripts/reinforcement_learning/rsl_rl/play.py --task=RobotLab-Isaac-Velocity-Rough-Agibot-D1-v0 --checkpoint=logs/rsl_rl/agibot_d1_rough/2026-04-13_23-23-05/model_8700.pt
+
+# B2训练
+python scripts/reinforcement_learning/rsl_rl/train.py --task=RobotLab-Isaac-Velocity-Rough-Unitree-B2-v0 --num_envs=1024 --headless
