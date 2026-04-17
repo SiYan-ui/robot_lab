@@ -101,7 +101,7 @@ XSDOG_CFG = ArticulationCfg(
             saturation_effort=110.0,
             velocity_limit=25.0,
             stiffness=140.0,
-            damping=5.0,
+            damping=10.0,
             friction=0.0,
         ),
     },

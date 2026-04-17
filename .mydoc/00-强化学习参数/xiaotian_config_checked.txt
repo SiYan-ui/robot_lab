@@ -1,0 +1,108 @@
+xiaotian 强化学习任务参数核对（基于项目源码）
+
+任务来源
+- 任务ID: RobotLab-Isaac-Velocity-Rough-Etc-Xiaotian-v0
+- 环境配置: source/robot_lab/robot_lab/tasks/manager_based/locomotion/velocity/config/quadruped/xiaotian/rough_env_cfg.py
+- 通用速度环境: source/robot_lab/robot_lab/tasks/manager_based/locomotion/velocity/velocity_env_cfg.py
+- 机器人与执行器: source/robot_lab/robot_lab/assets/etc.py
+
+按 config.yaml 参数名逐项核对
+
+1) model_name
+- 结论: 项目任务配置中无此参数（外部部署/导出文件名约定）。
+- 建议: 保留为外部参数，不作为训练任务真值。
+
+2) num_observations
+- 结论: 45（正确）
+- 依据:
+  - policy 观测项启用后为: base_ang_vel(3) + projected_gravity(3) + velocity_commands(3) + joint_pos(12) + joint_vel(12) + actions(12)
+  - base_lin_vel 被置空，height_scan 被置空
+  - 合计 3+3+3+12+12+12=45
+
+3) observations
+- config.yaml 当前写法: [ang_vel, gravity_vec, commands, dof_pos, dof_vel, actions]
+- 对应源码标准名:
+  - ang_vel -> base_ang_vel
+  - gravity_vec -> projected_gravity
+  - commands -> velocity_commands
+  - dof_pos -> joint_pos
+  - dof_vel -> joint_vel
+  - actions -> actions
+- 结论: 语义正确，但建议改为源码标准名以避免歧义。
+
+4) observations_history
+- 结论: 项目任务配置中无历史堆叠参数（无来源）。
+- 建议: 维持 [] 或由部署侧自定义。
+
+5) observations_history_priority
+- 结论: 项目任务配置中无此参数（无来源）。
+- 建议: 维持外部参数。
+
+6) clip_obs
+- 结论: 100.0（正确）
+- 依据: policy 各启用观测项 clip 基本为 (-100, 100)。
+
+7) clip_actions_lower / clip_actions_upper
+- config.yaml 当前值: 每关节 [-3, 3]
+- 结论: 与任务源码不一致，正确应为每关节 [-100, 100]
+- 依据: self.actions.joint_pos.clip = {".*": (-100.0, 100.0)}
+
+8) rl_kp / rl_kd
+- 结论: rl_kp=20.0, rl_kd=0.5（按12个关节展开，正确）
+- 依据: XIAOTIAN_CFG.actuators["legs"] 中 stiffness=20.0, damping=0.5
+
+9) fixed_kp / fixed_kd
+- 结论: 任务源码中无 fixed_kp/fixed_kd 定义（当前 80/3 无源码依据）。
+- 建议: 标记为无效或删除；若部署侧必须保留，请单独注明“非训练配置来源”。
+
+10) num_of_dofs
+- 结论: 12（正确）
+- 依据: xiaotian 关节列表 joint_names 共12个。
+
+11) action_scale
+- 结论: [0.125, 0.25, 0.25] x 4（正确）
+- 依据: hip=0.125，其他关节=0.25；按 joint_names 顺序展开。
+
+12) wheel_indices
+- 结论: []（正确）
+- 依据: xiaotian 为四足非轮式配置。
+
+13) lin_vel_scale
+- 结论: 对 xiaotian policy 无效（虽然在 rough_env_cfg 先设为2.0，但随后 base_lin_vel 被置空）。
+- 建议: 标记为未使用或删除。
+
+14) ang_vel_scale
+- 结论: 0.25（正确）
+- 依据: self.observations.policy.base_ang_vel.scale = 0.25
+
+15) dof_pos_scale
+- 结论: 1.0（正确）
+- 依据: self.observations.policy.joint_pos.scale = 1.0
+
+16) dof_vel_scale
+- 结论: 0.05（正确）
+- 依据: self.observations.policy.joint_vel.scale = 0.05
+
+17) commands_scale
+- 结论: [1.0, 1.0, 1.0]（正确）
+- 依据: velocity_commands scale=1.0，对应3维命令。
+
+18) torque_limits
+- 结论: 每关节 23.0（正确）
+- 依据: DCMotorCfg effort_limit=23.0（12关节）。
+
+19) default_dof_pos
+- 结论: [0.00, 0.80, -1.50] x 4（正确）
+- 依据: XIAOTIAN_CFG.init_state.joint_pos: hip=0.0, thigh=0.8, calf=-1.5。
+
+20) joint_mapping
+- 结论: [0,1,2,3,4,5,6,7,8,9,10,11]（正确）
+- 依据: 关节顺序由 joint_names 显式指定，且 preserve_order=True，映射为恒等顺序。
+
+建议的“源码一致版”关键修正
+- 必改:
+  - clip_actions_lower/upper -> 全部改为 -100.0 / 100.0
+- 建议改名（提升可维护性）:
+  - observations 中条目改为源码标准名: [base_ang_vel, projected_gravity, velocity_commands, joint_pos, joint_vel, actions]
+- 建议删除或标记外部参数:
+  - fixed_kp, fixed_kd, lin_vel_scale, observations_history, observations_history_priority, model_name

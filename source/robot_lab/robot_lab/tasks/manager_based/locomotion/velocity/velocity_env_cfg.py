@@ -376,7 +376,7 @@ class RewardsCfg:
     """Reward terms for the MDP."""
 
     # General
-    is_terminated = RewTerm(func=mdp.is_terminated, weight=0.0)
+    is_terminated = RewTerm(func=mdp.is_terminated, weight=-200.0)
 
     # Root penalties
     lin_vel_z_l2 = RewTerm(func=mdp.lin_vel_z_l2, weight=0.0)

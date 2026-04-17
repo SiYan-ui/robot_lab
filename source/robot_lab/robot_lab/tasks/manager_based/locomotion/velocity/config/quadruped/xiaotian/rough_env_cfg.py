@@ -147,7 +147,7 @@ class XiaotianRoughEnvCfg(LocomotionVelocityRoughEnvCfg):
             self.disable_zero_weight_rewards()
 
         # ------------------------------Terminations------------------------------
-        self.terminations.illegal_contact = None
+        self.terminations.illegal_contact.params["sensor_cfg"].body_names = self.base_link_name
 
         # ------------------------------Curriculums------------------------------
         self.curriculum.command_levels_lin_vel = None
