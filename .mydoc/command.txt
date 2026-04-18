@@ -6,14 +6,17 @@ python -m tensorboard.main --logdir=logs
 
 
 # 小田四足回放
-python scripts/reinforcement_learning/rsl_rl/play.py --task=RobotLab-Isaac-Velocity-Rough-Etc-Xiaotian-v0 --checkpoint=logs/rsl_rl/xiaotian_rough/2026-04-16_23-29-58/model_6500.pt
+python scripts/reinforcement_learning/rsl_rl/play.py --task=RobotLab-Isaac-Velocity-Rough-Etc-Xiaotian-v0 --checkpoint=logs/rsl_rl/xiaotian_rough/2026-04-17_4090/model_10700.pt
+
+# 小田四足v1训回放
+python scripts/reinforcement_learning/rsl_rl/play.py --task=RobotLab-Isaac-Velocity-Rough-Etc-Xiaotian-v1 --checkpoint=logs/rsl_rl/xiaotian_v1_rough/2026-04-17_22-48-30/model_9999.pt
 
 
 # 新松四足训练
-python scripts/reinforcement_learning/rsl_rl/train.py --task=RobotLab-Isaac-Velocity-Rough-Etc-XSDog-v0 --num_envs=1024 --headless
+python scripts/reinforcement_learning/rsl_rl/train.py --task=RobotLab-Isaac-Velocity-Rough-Etc-XSDog-v0 --num_envs=1024 --max_iterations=500 --headless
 
 
-python scripts/reinforcement_learning/rsl_rl/play.py  --task=RobotLab-Isaac-Velocity-Rough-Etc-XSDog-v0 --checkpoint=logs/rsl_rl/xsdog_rough/2026-04-16_17-20-47/model_9900.pt
+python scripts/reinforcement_learning/rsl_rl/play.py  --task=RobotLab-Isaac-Velocity-Rough-Etc-XSDog-v0 --checkpoint=logs/rsl_rl/xsdog_rough/2026-04-17_15-18-59/model_800.pt
 
 
 # 新松四足Flat训练

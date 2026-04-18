@@ -46,3 +46,9 @@ class XiaotianRoughTrainerCfg(TrainerCfg):
 class XiaotianFlatTrainerCfg(XiaotianRoughTrainerCfg):
     max_iterations = 5000
     experiment_name = "xiaotian_flat"
+
+
+@dataclass
+class XiaotianV1RoughTrainerCfg(XiaotianRoughTrainerCfg):
+    max_iterations = 1500
+    experiment_name = "xiaotian_v1_rough"

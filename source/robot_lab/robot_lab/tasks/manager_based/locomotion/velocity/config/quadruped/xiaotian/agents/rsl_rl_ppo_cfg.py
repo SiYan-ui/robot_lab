@@ -43,3 +43,12 @@ class XiaotianFlatPPORunnerCfg(XiaotianRoughPPORunnerCfg):
 
         self.max_iterations = 5000
         self.experiment_name = "xiaotian_flat"
+
+
+@configclass
+class XiaotianV1RoughPPORunnerCfg(XiaotianRoughPPORunnerCfg):
+    def __post_init__(self):
+        super().__post_init__()
+
+        self.max_iterations = 1500
+        self.experiment_name = "xiaotian_v1_rough"

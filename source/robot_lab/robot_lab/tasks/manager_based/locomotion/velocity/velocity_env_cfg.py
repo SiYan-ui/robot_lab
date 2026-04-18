@@ -516,6 +516,15 @@ class RewardsCfg:
             "threshold": 1.0,
         },
     )
+    illegal_contact_duration_penalty = RewTerm(
+        func=mdp.illegal_contact_duration_penalty,
+        weight=0.0,
+        params={
+            "sensor_cfg": SceneEntityCfg("contact_forces", body_names=""),
+            "threshold": 1.0,
+            "hold_time_s": 10.0,
+        },
+    )
     contact_forces = RewTerm(
         func=mdp.contact_forces,
         weight=0.0,
@@ -668,6 +677,8 @@ class TerminationsCfg:
         func=mdp.illegal_contact,
         params={"sensor_cfg": SceneEntityCfg("contact_forces", body_names=""), "threshold": 1.0},
     )
+    # Optional task-specific termination (e.g., persistent illegal body pose)
+    illegal_pose = None
 
 
 @configclass

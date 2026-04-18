@@ -687,6 +687,27 @@ def undesired_contacts(env: ManagerBasedRLEnv, threshold: float, sensor_cfg: Sce
     return reward
 
 
+def illegal_contact_duration_penalty(
+    env: ManagerBasedRLEnv,
+    sensor_cfg: SceneEntityCfg,
+    threshold: float,
+    hold_time_s: float,
+) -> torch.Tensor:
+    """Penalize the duration of illegal contact, saturating after ``hold_time_s`` seconds.
+
+    The penalty grows linearly from 0 to 1 with continuous illegal-contact time.
+    Once contact lasts longer than ``hold_time_s``, the penalty remains at 1.
+    """
+    contact_sensor: ContactSensor = env.scene.sensors[sensor_cfg.name]
+    net_contact_forces = contact_sensor.data.net_forces_w_history
+    # [num_envs, num_bodies] over-threshold mask from recent contact-force history
+    over_threshold = torch.max(torch.norm(net_contact_forces[:, :, sensor_cfg.body_ids], dim=-1), dim=1)[0] > threshold
+    current_contact_time = contact_sensor.data.current_contact_time[:, sensor_cfg.body_ids]
+    persistent_contact_time = torch.where(over_threshold, current_contact_time, torch.zeros_like(current_contact_time))
+    max_contact_time = torch.max(persistent_contact_time, dim=1)[0]
+    return torch.clamp(max_contact_time / hold_time_s, min=0.0, max=1.0)
+
+
 def flat_orientation_l2(env: ManagerBasedRLEnv, asset_cfg: SceneEntityCfg = SceneEntityCfg("robot")) -> torch.Tensor:
     """Penalize non-flat base orientation using L2 squared kernel.
 

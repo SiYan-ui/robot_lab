@@ -27,6 +27,19 @@ def joint_pos_rel_without_wheel(
     return joint_pos_rel
 
 
+def scaled_generated_commands(
+    env: ManagerBasedEnv,
+    command_name: str,
+    lin_vel_scale: float,
+    ang_vel_scale: float,
+) -> torch.Tensor:
+    """Return velocity commands with Legged Gym compatible per-channel scaling."""
+    commands = env.command_manager.get_command(command_name)[:, :3].clone()
+    commands[:, :2] *= lin_vel_scale
+    commands[:, 2] *= ang_vel_scale
+    return commands
+
+
 def phase(env: ManagerBasedRLEnv, cycle_time: float) -> torch.Tensor:
     if not hasattr(env, "episode_length_buf") or env.episode_length_buf is None:
         env.episode_length_buf = torch.zeros(env.num_envs, device=env.device, dtype=torch.long)
