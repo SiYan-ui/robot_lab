@@ -46,3 +46,9 @@ class XSDogRoughTrainerCfg(TrainerCfg):
 class XSDogFlatTrainerCfg(XSDogRoughTrainerCfg):
     max_iterations = 5000
     experiment_name = "xsdog_flat"
+
+
+@dataclass
+class XSDogV1RoughTrainerCfg(XSDogRoughTrainerCfg):
+    max_iterations = 1500
+    experiment_name = "xsdog_v1_rough"

@@ -43,3 +43,12 @@ class XSDogFlatPPORunnerCfg(XSDogRoughPPORunnerCfg):
 
         self.max_iterations = 10000
         self.experiment_name = "xsdog_flat"
+
+
+@configclass
+class XSDogV1RoughPPORunnerCfg(XSDogRoughPPORunnerCfg):
+    def __post_init__(self):
+        super().__post_init__()
+
+        self.max_iterations = 1500
+        self.experiment_name = "xsdog_v1_rough"
